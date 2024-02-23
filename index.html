@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>User Images</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+  .container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 20px;
+  }
+  .image-card {
+  width: 200px;
+  height: 250px;
+  margin: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
+  display: flex; 
+  flex-direction: column; 
+}
+
+.image-card img {
+  width: 100%;
+  height: auto;
+  display: block;
+  flex: 1;
+}
+
+.image-info {
+  padding: 10px;
+  text-align: center;
+  background-color: #f5f5f5;
+  font-size: 14px;
+}
+
+.image-info:hover{
+    background-color: #1b97b3;
+    color: #f5f5f5;
+}
+</style>
+</head>
+<body>
+<div class="container" id="image-container"></div>
+
+<script>
+  // Sample JSON data
+  const imageData = [
+    { 
+        "image": "https://media.istockphoto.com/id/1270790502/photo/medical-concept-of-indian-beautiful-female-doctor-with-note-book.webp?b=1&s=170667a&w=0&k=20&c=1SeKJzjB9loT2tW4wzxQ5S-iNMz31-iarSLka2j1hyw=",
+        "name": "Dr. John Doe",
+        "description": "Pediatric Dental Consultant"
+    },
+    { 
+        "image": "https://media.istockphoto.com/id/1172429034/photo/managing-her-daily-medical-duties.webp?b=1&s=170667a&w=0&k=20&c=yhK57sPHnxOLoQu3oawxMmB73LSXLlKTPIZq7FwFG-c=",
+        "name": "Dr. Jane Smith",
+        "description": "Orthopedic Surgeon"
+    },
+    { 
+        "image": "https://media.istockphoto.com/id/1410398449/photo/male-doctor-in-a-medical-clinic-writing-prescription-for-a-young-female-patient.webp?b=1&s=170667a&w=0&k=20&c=bqb2aMwS-gmsQUSQkMS2uz3AAv8OgH-m9CJQikfGHFo=",
+        "name": "Dr. Michael Johnson",
+        "description": "Cardiologist"
+    },
+    { 
+        "image": "https://media.istockphoto.com/id/1294124736/photo/portrait-of-female-doctor-working-in-clinic-stock-photo.webp?b=1&s=170667a&w=0&k=20&c=-e9FCI1bLUBGKuUns8Pn0v06aZrZ1BSVwTZVbn-W2SU=",
+        "name": "Dr. Emily Williams",
+        "description": "Dermatologist"
+    },
+    { 
+        "image": "https://media.istockphoto.com/id/1203928556/photo/medical-concept-of-asian-beautiful-female-doctor-in-white-coat-with-stethoscope-waist-up.webp?b=1&s=170667a&w=0&k=20&c=oTM7Z1qt6Td1TxUtda_3CS7uddsTcU1cdVmQnPser98=",
+        "name": "Dr. Robert Brown",
+        "description": "Neurologist"
+    },
+    { 
+        "image": "https://media.istockphoto.com/id/671290874/photo/portrait-of-a-female-doctor.webp?b=1&s=170667a&w=0&k=20&c=xq9dTuHur5oQiRnYIQqCtw4w9aIO9A8sjDI5jzgxCh0=",
+        "name": "Dr. Sarah Jones",
+        "description": "Oncologist"
+    },
+    { 
+        "image": "https://media.istockphoto.com/id/1301595548/photo/female-doctor-stock-photo.webp?b=1&s=170667a&w=0&k=20&c=PuETMPqopkx5YAh17Q9IkPkfFqLAIfa4sxEVQFqrAZI=",
+        "name": "Dr. David Davis",
+        "description": "Psychiatrist"
+    },
+    { 
+        "image": "https://media.istockphoto.com/id/1319031310/photo/doctor-writing-a-medical-prescription.webp?b=1&s=170667a&w=0&k=20&c=r8Nij9sogE8kcAwqddspSGpdvjE_VEJuexAXEm0DF_s=",
+        "name": "Dr. Lisa Miller",
+        "description": "Gynecologist"
+    },
+    { 
+        "image": "https://media.istockphoto.com/id/1496007079/photo/team-of-indian-doctors-standing-standing-at-hospital-healthcare-concept.webp?b=1&s=170667a&w=0&k=20&c=1qHuRDsGsGjkqoVStcEjQF3b32d8aXKfiKsCxKHeDrw=",
+        "name": "Dr. Jennifer Taylor",
+        "description": "Ophthalmologist"
+    },
+    { 
+        "image": "https://media.istockphoto.com/id/1460982334/photo/portrait-happy-confident-indian-male-and-female-doctors-with-stethoscope-standing-cross-arms.webp?b=1&s=170667a&w=0&k=20&c=7Mnkoq24lfu2tTO2f8X_GnR3-WTwbmMd5x7Xwbs4TWo=",
+        "name": "Dr. Johnathan Clark",
+        "description": "Pulmonologist"
+    },
+    { 
+        "image": "https://media.istockphoto.com/id/1293904378/photo/female-doctor-stock-photo.webp?b=1&s=170667a&w=0&k=20&c=oljbBFjqzn0gfNLCSu17kAmZVigGAhlY0oezjT8IGlA=",
+        "name": "Dr. Mary Johnson",
+        "description": "Neonatologist"
+    },
+    { 
+        "image": "https://media.istockphoto.com/id/1730222050/photo/photo-of-doctor-lady-smile-looking-at-camera-wear-stethoscope-white-uniform-isolate-white.jpg?s=612x612&w=0&k=20&c=KfZT1DzVMcGvHZZg4NnUhHwvOiI5xPYRe1AWvCwOqE4=",
+        "name": "Dr. Samantha White",
+        "description": "Endocrinologist"
+    },
+    { 
+        "image": "https://media.istockphoto.com/id/1080237358/photo/indian-male-doctor-on-blue-background-stock-image.jpg?s=612x612&w=0&k=20&c=584Xv0Nsqtxl1wGVGjDH7aunkBDWguG3nyR3sxEh4tU=",
+        "name": "Dr. James Johnson",
+        "description": "Hematologist"
+    },
+    { 
+        "image": "https://media.istockphoto.com/id/1319031310/photo/doctor-writing-a-medical-prescription.webp?b=1&s=170667a&w=0&k=20&c=r8Nij9sogE8kcAwqddspSGpdvjE_VEJuexAXEm0DF_s=",
+        "name": "Dr. William Wilson",
+        "description": "Urologist"
+    },
+    { 
+        "image": "https://media.istockphoto.com/id/1305635445/photo/smiling-indian-young-female-doctor-standing-isolated-over-white-background-stock-photo.jpg?s=612x612&w=0&k=20&c=3AFPZtn5rMKwYk_jGfkhLeW7P0NdcXaqYRcA9ZFp-uc=",
+        "name": "Dr. Amanda Lee",
+        "description": "Gastroenterologist"
+    },
+    { 
+        "image": "https://media.istockphoto.com/id/1367507209/photo/portrait-of-indian-female-doctor-stock-photo.jpg?s=612x612&w=0&k=20&c=mI-MPGA_bHBLK9D77v8shYOZdI7Pqnlh2_xJE00tUHM=",
+        "name": "Dr. Olivia Garcia",
+        "description": "Pediatrician"
+    },
+    { 
+        "image": "https://media.istockphoto.com/id/1200980392/photo/medical-concept-of-asian-beautiful-female-doctor-in-white-coat-with-stethoscope-waist-up.jpg?s=612x612&w=0&k=20&c=nD_1Tn11kWcMZwZfnyA-lYAvNKcBeoEK_KLObBnN6Jg=",
+        "name": "Dr. Benjamin Adams",
+        "description": "Radiologist"
+    },
+    { 
+        "image": "https://media.istockphoto.com/id/1394769128/photo/nurse-with-medical-file-at-hospital.jpg?s=612x612&w=0&k=20&c=kmgF0KSnG0p2OylR4s8lrOPqyo8d0CUzNDGNliYBYsg=",
+        "name": "Dr. Ava Hernandez",
+        "description": "Nurse Practitioner"
+    },
+    { 
+        "image": "https://media.istockphoto.com/id/1473337705/photo/cheerful-female-doctor-in-white-uniform-holding-clipboard-stock-photo.jpg?s=612x612&w=0&k=20&c=VV0Jw6ipf7sNaTMdwlFtlAGqgU1OFBWe1IaxCsaGtBo=",
+        "name": "Dr. Lucas Wilson",
+        "description": "General Practitioner"
+    },
+    { 
+        "image": "https://media.istockphoto.com/id/1342708859/photo/portrait-of-a-male-doctor.jpg?s=612x612&w=0&k=20&c=7ojvfSnLNx73sR1xXTReBrIXJOZPpSNFZ3E9CodsfQU=",
+        "name": "Dr. Sophia Martinez",
+        "description": "Family Physician"
+    },
+    { 
+        "image": "https://media.istockphoto.com/id/871584818/photo/running-through-a-treatment-plan-with-a-patient.jpg?s=612x612&w=0&k=20&c=zN3HpqIpnZaOCA5rZssH3Pzl5WH8YoAM4MUHz5wIZOs=",
+        "name": "Dr. Ethan Johnson",
+        "description": "Emergency Physician"
+    },
+    { 
+        "image": "https://media.istockphoto.com/id/1292859438/photo/portrait-female-doctor-stock-photo.jpg?s=612x612&w=0&k=20&c=mup68rQeZ4sFY5_lBJJubw7X0R0RLJA41l-QopXi0zQ=",
+        "name": "Dr. Isabella Clark",
+        "description": "Internist"
+    },
+    { 
+        "image": "https://media.istockphoto.com/id/1356329827/photo/doctor-medical-pakistani-indian.jpg?s=612x612&w=0&k=20&c=0zCcLxhrfl2SgvdYv38HQ5ieq8-g9GAKLO6SCVTsyQk=",
+        "name": "Dr. Jackson Williams",
+        "description": "Osteopath"
+    },
+    { 
+        "image": "https://media.istockphoto.com/id/1446041217/photo/portrait-of-smiling-male-doctor-on-white-background.jpg?s=612x612&w=0&k=20&c=jLi6DhqkE8MJXdne--PvFcEIdtcRrGqeK_ajGfJ6VCY=",
+        "name": "Dr. Lily Anderson",
+        "description": "Pathologist"
+    },
+    { 
+        "image": "https://media.istockphoto.com/id/1394769128/photo/nurse-with-medical-file-at-hospital.jpg?s=612x612&w=0&k=20&c=kmgF0KSnG0p2OylR4s8lrOPqyo8d0CUzNDGNliYBYsg=",
+        "name": "Dr. Matthew Rodriguez",
+        "description": "Physician Assistant"
+    }
+];
+
+
+  const container = document.getElementById('image-container');
+
+  // Function to create image cards using .map()
+  function createImageCards(data) {
+    return data.map(item => {
+      const imageCard = document.createElement('div');
+      imageCard.classList.add('image-card');
+      const image = document.createElement('img');
+      image.src = item.image;
+      image.alt = 'User Image';
+      imageCard.appendChild(image);
+
+      const infoDiv = document.createElement('div');
+      infoDiv.classList.add('image-info');
+
+      const namePara = document.createElement('p')
+      namePara.textContent = item.name;
+      infoDiv.appendChild(namePara);
+
+      const descPara = document.createElement('p');
+      descPara.textContent = item.description;
+      infoDiv.appendChild(descPara);
+      
+      imageCard.appendChild(infoDiv);
+
+      return imageCard;
+    });
+  }
+
+  function appendImageCard(imageCards) {
+        imageCards.forEach(card => {
+            container.appendChild(card)
+        });
+  }
+
+  window.addEventListener('DOMContentLoaded' , () => {
+    const imageCards = createImageCards(imageData);
+    appendImageCard(imageCards);
+  })
+</script>
+</body>
+</html>
